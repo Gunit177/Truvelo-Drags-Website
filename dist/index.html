@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#090e1b" />
+    <meta
+      name="description"
+      content="The Truvelo Drags race hub. Follow live timing, find upcoming drag racing events, explore race results and request event timing."
+    />
+    <title>Truvelo Drags — The Race Hub</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23090e1b'/%3E%3Cpath d='M5 8h24l-2 5h-8l-5 15H8l5-15H3z' fill='%2300dcff'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="assets/supabase.js" defer></script>
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="topline">
+      <span
+        >RALF GEBERT TIMING SYSTEMS <span class="muted">/</span> TRUVELO
+        DRAGS</span
+      ><span>PRECISION TIMING. PURE RACING.</span>
+    </div>
+    <header class="header">
+      <a
+        class="brand"
+        href="#home"
+        aria-label="Ralf Gebert Timing Systems — Truvelo Drags home"
+        ><img
+          class="brand-logo"
+          src="assets/ralf-gebert-logo.png"
+          alt="Ralf Gebert Timing Systems"
+        /><span
+          ><strong>TRUVELO<span> DRAGS</span></strong
+          ><small>RALF GEBERT TIMING SYSTEMS</small></span
+        ></a
+      >
+      <button
+        class="menu-button icon-button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="navigation"
+      >
+        ☰
+      </button>
+      <nav id="navigation" aria-label="Main navigation">
+        <a href="#home" data-nav="home">Overview</a
+        ><a href="#live" data-nav="live">Live timing <i class="nav-dot"></i></a
+        ><a href="#events" data-nav="events">Future events</a
+        ><a href="#history" data-nav="history">History & results</a
+        ><a href="#contact" data-nav="contact">Contact us</a>
+      </nav>
+      <button class="button login-button" data-action="login">
+        <span aria-hidden="true">↗</span>
+        <span id="account-label">Log in</span>
+      </button>
+    </header>
+    <main id="main" tabindex="-1"></main>
+    <footer>
+      <div class="footer-top">
+        <a class="footer-brand" href="#home">TRUVELO<span> DRAGS</span></a>
+        <p>Ralf Gebert Timing Systems</p>
+        <a href="#contact">Let’s time your next event <span>↗</span></a>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Ralf Gebert Timing Systems</span
+        ><span>Website by Ganicon Electrics (Pty) Ltd</span
+        ><button class="text-button" data-action="privacy">
+          Privacy & your data
+        </button>
+      </div>
+    </footer>
+    <dialog id="modal" aria-labelledby="modal-title">
+      <button class="modal-close icon-button" aria-label="Close dialog">
+        ×
+      </button>
+      <div id="modal-content"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <noscript
+      >This website needs JavaScript for event search and sign-in. Please enable
+      JavaScript in your browser.</noscript
+    >
+  </body>
+</html>

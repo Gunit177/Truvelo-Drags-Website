@@ -1,0 +1,17 @@
+{
+  "name": "truvelo-drags-race-hub",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "check": "node --check dist/app.js && node --check dist/config.js && node --check dist/services.js && node --check dist/formatter.js && node tests/core.test.mjs && node --test tests/formatter.test.mjs",
+    "format": "prettier --write dist/*.js dist/*.css dist/*.html scripts/*.mjs tests/*.mjs supabase/functions/**/*.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.57.4"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}

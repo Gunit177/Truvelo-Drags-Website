@@ -1,0 +1,3 @@
+[functions.quote-request]
+# Public enquiry endpoint, independently checked using Turnstile.
+verify_jwt = false
