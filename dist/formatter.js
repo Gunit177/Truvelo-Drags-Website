@@ -1,5 +1,5 @@
 import * as XLSX from './assets/xlsx.js';
-import {validate,csv,sql,columns} from './formatter-core.js';
+import {validate,csv,sql,columns} from './formatter-core.js?v=20261020';
 const $=id=>document.getElementById(id);
 let book,pack,source,revision=0;
 function clear(){pack=null;$('reviewed').checked=false;$('reviewed').disabled=true;for(const id of ['csv','sql','report'])$(id).disabled=true;$('preview').replaceChildren();$('issues').textContent='';}
