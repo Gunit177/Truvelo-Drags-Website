@@ -31,3 +31,22 @@ test('CSV reader preserves quoted commas and original legacy header layout',()=>
  const loaded=XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]],{header:1,defval:null,raw:true});
  const p=validate(loaded,options);assert.equal(p.errors.length,0);assert.equal(p.results[0].driver,'Driver, One');
 });
+test('explicit invalid-lane exclusion retains valid opposite lane and original evidence',()=>{
+ const input=rows({...base,Driver1:null},{...base,Run:2,CCDate:null});
+ const strict=validate(input,options);assert.equal(strict.errors.length,3);assert.throws(()=>sql(strict));
+ const p=validate(input,{...options,excludeInvalid:true});
+ assert.equal(p.errors.length,0);assert.equal(p.results.length,1);assert.equal(p.results[0].lane,2);
+ assert.equal(p.excluded.length,3);assert.equal(p.excluded[0].reason,strict.errors[0].reason);
+ assert.equal(p.excluded[0].raw_source.Driver1,null);assert.equal(p.excluded[1].raw_source.CCDate,null);
+ assert.ok(p.excluded.every(r=>r.confirmed && r.exclusion_type==='validation_error'));
+ assert.match(sql(p),/<> 1 THEN/);
+ assert.equal(validate(input,{...options,excludeInvalid:false}).errors.length,3);
+});
+test('exclusion cannot bypass invalid event, schema or no valid results',()=>{
+ const opt={...options,excludeInvalid:true};
+ assert.throws(()=>validate(rows(base),{...opt,eventId:'bad'}));
+ assert.throws(()=>validate(rows(base),{...opt,date:'2026-02-30'}));
+ assert.throws(()=>validate([['Run']],opt));
+ const p=validate(rows({...base,CCDate:null}),opt);
+ assert.equal(p.excluded.length,2);assert.equal(p.errors[0].reason,'No valid results found');assert.throws(()=>sql(p));
+});

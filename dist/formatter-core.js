@@ -57,7 +57,11 @@ export function validate(rows, options) {
         if (+result.sixty_ft<=0 || +result.elapsed<=+result.sixty_ft || +result.speed<=0) throw Error('Require positive speed and 0 < sixty-foot time < quarter-mile ET');
         results.push(result);
         lineage.push({...audit,raw_reaction:row['React'+lane],raw_sixty_ft:row['Sixty'+lane],raw_elapsed:row['QuartT'+lane],raw_speed:row['QuartS'+lane],captured_date:options.date});
-      } catch(e) { errors.push({...audit,reason:e.message}); }
+      } catch(e) {
+        const issue={...audit,reason:e.message,raw_source:row};
+        if (options.excludeInvalid === true) excluded.push({...issue,exclusion_type:'validation_error',confirmed:true});
+        else errors.push(issue);
+      }
     }
   });
   if (!results.length) errors.push({source_row:'',lane:'',reason:'No valid results found'});
