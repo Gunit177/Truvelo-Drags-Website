@@ -40,3 +40,7 @@ The browser spreadsheet reader is SheetJS CE 0.20.3, vendored from https://cdn.s
 ## Later work
 
 Protected website administrator roles, direct database uploads and event editing are a separate future release. Supabase project access is used for administration today.
+
+## Multi-day events and unreliable run dates
+
+Select **Use the event date** to accept different, missing or invalid run dates after confirming the worksheet belongs to this event. This also allows exports without a CCDate column. The event date must still match the Supabase event, which must be unpublished during import. Original row fields, including dates and time-of-day fields, remain in the review JSON; the results CSV/SQL does not add run timestamps to the database. Keep the original workbook and report for future analysis. Timing measurements and duplicate run/lane checks remain enforced. If run numbers restart on day two, review those duplicates before importing; this option does not renumber them.

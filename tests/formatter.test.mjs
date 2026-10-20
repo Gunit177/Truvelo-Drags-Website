@@ -50,3 +50,21 @@ test('exclusion cannot bypass invalid event, schema or no valid results',()=>{
  const p=validate(rows({...base,CCDate:null}),opt);
  assert.equal(p.excluded.length,2);assert.equal(p.errors[0].reason,'No valid results found');assert.throws(()=>sql(p));
 });
+test('event-date mode accepts multi-day, missing and invalid dates while retaining original fields',()=>{
+ const data=rows({...base,CCDate:'2026-04-04'},{...base,Run:2,CCDate:'2026-04-05'},{...base,Run:3,CCDate:null},{...base,Run:4,CCDate:'bad clock'});
+ data[0].push('CCTime');for(const row of data.slice(1))row.push('14:35:17');
+ const opt={...options,date:'2026-04-04',ignoreRunDates:true};
+ const p=validate(data,opt);assert.equal(p.errors.length,0);assert.equal(p.results.length,8);
+ assert.equal(p.lineage[2].raw_captured_date,'2026-04-05');assert.equal(p.lineage[4].raw_captured_date,null);
+ assert.equal(p.lineage[0].raw_source.CCTime,'14:35:17');assert.equal(p.lineage[2].event_date,'2026-04-04');
+ assert.ok(validate(data,{...opt,ignoreRunDates:false}).errors.length>0);
+ assert.match(sql(p),/date=E'2026-04-04'/);
+ const noDate=data.map(row=>row.filter((_,i)=>i!==1));assert.equal(validate(noDate,opt).results.length,8);
+ assert.throws(()=>validate(noDate,{...opt,ignoreRunDates:false}),/CCDate/);
+});
+test('event-date mode still rejects bad timings, duplicate lanes and invalid event dates',()=>{
+ const opt={...options,ignoreRunDates:true};
+ assert.equal(validate(rows({...base,CCDate:null,QuartT1:null}),opt).errors.length,1);
+ assert.equal(validate(rows(base,base),opt).errors.length,2);
+ assert.throws(()=>validate(rows(base),{...opt,date:'bad'}));
+});

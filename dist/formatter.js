@@ -1,5 +1,5 @@
 import * as XLSX from './assets/xlsx.js';
-import {validate,csv,sql,columns} from './formatter-core.js?v=20261020';
+import {validate,csv,sql,columns} from './formatter-core.js?v=20261020-multiday';
 const $=id=>document.getElementById(id);
 let book,pack,source,revision=0;
 function clear(){pack=null;$('reviewed').checked=false;$('reviewed').disabled=true;for(const id of ['csv','sql','report'])$(id).disabled=true;$('preview').replaceChildren();$('issues').textContent='';}
@@ -30,9 +30,9 @@ $('form').addEventListener('submit',event=>{
     if(range.e.r>20000 || range.e.c>200)throw Error('Sheet exceeds 20,000 rows or 201 columns.');
     for(const [cell,value] of Object.entries(sheet))if(!cell.startsWith('!') && value.f)throw Error(`Formula found at ${cell}. Use the original values-only timing export.`);
     const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:null,raw:true,range:0});
-    pack=validate(rows,{eventId:$('eventId').value.trim(),date:$('date').value,system:$('system').value,quarterConfirmed:$('quarter').checked,excludeCalibration:$('calibration').checked,excludeUnnumbered:$('unnumbered').checked,excludeInvalid:$('invalid').checked});
+    pack=validate(rows,{eventId:$('eventId').value.trim(),date:$('date').value,system:$('system').value,quarterConfirmed:$('quarter').checked,excludeCalibration:$('calibration').checked,excludeUnnumbered:$('unnumbered').checked,excludeInvalid:$('invalid').checked,ignoreRunDates:$('ignoreRunDates').checked});
     pack.source={...source,sheet:$('sheet').value};
-    $('status').textContent=`${pack.results.length} valid results; ${pack.excluded.length} excluded lanes; ${pack.errors.length} errors. Event ${pack.options.eventId}, ${pack.options.date}, system ${pack.options.system}.` + (pack.errors.length ? ' Review the errors below. Correct the source, or select the option in step 2 to exclude invalid results, then validate again.' : ' Review every exclusion before confirming and downloading.');
+    $('status').textContent=`${pack.results.length} valid results; ${pack.excluded.length} excluded lanes; ${pack.errors.length} errors. Event ${pack.options.eventId}, ${pack.options.date}, system ${pack.options.system}.` + (pack.options.ignoreRunDates ? ' Run dates are not checked; original values remain in the review report.' : '') + (pack.errors.length ? ' Review the errors below. Correct the source, or select the option in step 2 to exclude invalid results, then validate again.' : ' Review every exclusion before confirming and downloading.');
     $('issues').textContent=[...pack.errors.map(r=>`ERROR row ${r.source_row}, lane ${r.lane}: ${r.reason}`),...pack.excluded.map(r=>`EXCLUDED row ${r.source_row}, lane ${r.lane}, run ${r.run_no}: ${r.reason}`)].join('\n');
     const table=document.createElement('table'),head=table.createTHead().insertRow();
     const visible=columns.filter(k=>k!=='event_id');

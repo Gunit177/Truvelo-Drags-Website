@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Drag results formatter | Truvelo Drags</title>
-<link rel="stylesheet" href="formatter.css"><script type="module" src="formatter.js?v=20261020"></script></head>
+<link rel="stylesheet" href="formatter.css"><script type="module" src="formatter.js?v=20261020-multiday"></script></head>
 <body><main><a href="index.html">← Truvelo Drags</a><p class="eyebrow">RALF GEBERT TIMING SYSTEMS</p><h1>Drag results formatter</h1>
 <p>Turn your legacy timing spreadsheet into reviewed quarter-mile results for Supabase. Your file stays in this browser. Nothing is uploaded or published automatically.</p>
 <section><h2>1. Choose your results</h2><label>Excel (.xlsx) or CSV export <input id="file" type="file" accept=".xlsx,.csv"></label><label>Worksheet <select id="sheet" disabled></select></label><p>Use the original two-lane export with Run, Driver1/2, React1/2, Sixty1/2, QuartT1/2 and QuartS1/2 columns. Maximum file size: 10 MB.</p></section>
@@ -9,6 +9,8 @@
 <label class="check"><input id="quarter" type="checkbox" required>I confirm TrackType 400 means ¼ mile, and QuartS is measured km/h.</label>
 <label class="check"><input id="calibration" type="checkbox">Exclude ID 999 / Truvelo entries: I confirm these were calibration runs for this event.</label>
 <label class="check"><input id="unnumbered" type="checkbox">Exclude unnumbered runs: I confirm these are faulty captures.</label>
+<label class="check"><input id="ignoreRunDates" type="checkbox">Use the event date: accept runs with different, missing or invalid recorded dates. I confirm this worksheet belongs to the selected event.</label>
+<p>For multi-day events or unreliable system clocks, select this option. Original run dates and time-of-day fields stay in the review report. Reaction, sixty-foot, quarter-mile ET and speed are still validated.</p>
 <label class="check"><input id="invalid" type="checkbox">Exclude results with validation errors: I accept that these lanes will not be published. Keep their original values and reasons in the review report.</label>
 <p>Validate first to see errors. If you choose to exclude them, validate again and review the exclusions. A valid result in the opposite lane is kept.</p>
 <button type="submit">Validate results</button></section></form>
